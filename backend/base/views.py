@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .products import products
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 # Create your views here.
 routes = [
@@ -18,8 +20,19 @@ routes = [
     '/api/v1/products/<update>/<id>/',
 ]
 
+@api_view(http_method_names=['GET'])
 def getRoutes(request):
-  return JsonResponse(routes, safe=False)
+  return Response(routes)
 
+@api_view(http_method_names=['GET'])
 def getProducts(request):
-  return JsonResponse(products, safe=False)
+  return Response(products)
+
+@api_view(http_method_names=['Get'])
+def getProduct(request, pk):
+  product = None
+  for i in products:
+    if i['_id'] == pk:
+      product = i
+      break
+  return Response(product)
